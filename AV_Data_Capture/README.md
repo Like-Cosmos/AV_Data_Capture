@@ -220,6 +220,11 @@ naming_rule=number+'-'+title
 已有默认配置
 
 ---
+###（更新config文件添加自定义路径，引发异常通配符）错误问题
+[Name_path]
+custom_path'任意路径'
+boolean  = ture
+---
 ### 命名参数
 ```
 title = 片名
