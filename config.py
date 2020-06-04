@@ -42,6 +42,13 @@ class Config:
 
     def location_rule(self) -> str:
         return self.conf.get("Name_Rule", "location_rule")
+    # 自定义切换路径
+    def custom_path(self) -> str:
+        if self.conf.get("Name_path","boolean_isok") == 'yes':
+            return self.conf.get("Name_path", "custom_path")
+        else:
+            return 'False'
+
 
     def update_check(self) -> bool:
         try:
@@ -111,15 +118,16 @@ class Config:
 
 if __name__ == "__main__":
     config = Config()
-    print(config.main_mode())
-    print(config.failed_folder())
-    print(config.success_folder())
-    print(config.soft_link())
-    print(config.proxy())
-    print(config.naming_rule())
-    print(config.location_rule())
-    print(config.update_check())
-    print(config.sources())
-    print(config.escape_literals())
-    print(config.escape_folder())
-    print(config.debug())
+    # print(config.main_mode())
+    # print(config.failed_folder())
+    # print(config.success_folder())
+    # print(config.soft_link())
+    # print(config.proxy())
+    # print(config.naming_rule())
+    # print(config.location_rule())
+    # print(config.update_check())
+    # print(config.sources())
+    # print(config.escape_literals())
+    # print(config.escape_folder())
+    # print(config.debug())
+    print(config.custom_path())

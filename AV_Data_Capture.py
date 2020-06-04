@@ -34,18 +34,19 @@ def argparse_function() -> [str, str, bool]:
 
 
 def movie_lists(root, escape_folder):
+    # 自定义路径
+    if conf.custom_path() != 'False':
+        os.chdir(conf.custom_path())
+
     for folder in escape_folder:
         if folder in root:
             return []
     total = []
     file_type = ['.mp4', '.avi', '.rmvb', '.wmv', '.mov', '.mkv', '.flv', '.ts', '.webm', '.MP4', '.AVI', '.RMVB', '.WMV','.MOV', '.MKV', '.FLV', '.TS', '.WEBM', ]
-
-    #  自定义
-    # paths = "Z:/sata_r0/japan小姐姐/EE1E/japan小姐姐"
     dirs = os.listdir(root)
     for entry in dirs:
-
         f = os.path.join(root, entry)
+        print(f)
         if os.path.isdir(f):
             total += movie_lists(f, escape_folder)
         elif os.path.splitext(f)[1] in file_type:
@@ -70,11 +71,12 @@ def CEF(path):
             os.removedirs(path + '/' + file)  # 删除这个空文件夹
             print('[+]Deleting empty folder', path + '/' + file)
     except:
-        a = ''
+        pass
 
 
 def create_data_and_move(file_path: str, c: config.Config):
     # Normalized number, eg: 111xxx-222.mp4 -> xxx-222.mp4
+    print(file_path)
     n_number = get_number(file_path)
 
     try:
@@ -104,6 +106,7 @@ if __name__ == '__main__':
 
     # Read config.ini
     conf = config.Config(path=config_file)
+
     version_print = 'Version ' + version
     print('[*]================== AV Data Capture ===================')
     print('[*]' + version_print.center(54))
@@ -115,7 +118,6 @@ if __name__ == '__main__':
     create_failed_folder(conf.failed_folder())
     os.chdir(os.getcwd())
     movie_list = movie_lists(".", re.split("[,，]", conf.escape_folder()))
-
 
     # ========== 野鸡番号拖动 ==========
     if not single_file_path == '':
