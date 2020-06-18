@@ -1,9 +1,10 @@
-import os
+import os,sys
 import configparser
 
 
 class Config:
-    def __init__(self, path: str = "config.ini"):
+    # 工作目录 os.getcwd() 绝对路径sys.path[0]+"\config.ini" sys 是当前脚本路径的绝对路径，否则工作路径切换后会找不到脚本
+    def __init__(self, path: str = sys.path[0]+"\config.ini"):
         if os.path.exists(path):
             self.conf = configparser.ConfigParser()
             self.conf.read(path, encoding="utf-8")
@@ -42,9 +43,9 @@ class Config:
 
     def location_rule(self) -> str:
         return self.conf.get("Name_Rule", "location_rule")
-    # 自定义切换路径
+
     def custom_path(self) -> str:
-        if self.conf.get("Name_path","boolean_isok") == 'yes':
+        if self.conf.get("Name_path", "boolean_isok") == 'yes':
             return self.conf.get("Name_path", "custom_path")
         else:
             return 'False'
@@ -77,7 +78,6 @@ class Config:
     @staticmethod
     def _default_config() -> configparser.ConfigParser:
         conf = configparser.ConfigParser()
-
         sec1 = "common"
         conf.add_section(sec1)
         conf.set(sec1, "main_mode", "1")
@@ -118,6 +118,7 @@ class Config:
 
 if __name__ == "__main__":
     config = Config()
+    print(config.custom_path())
     # print(config.main_mode())
     # print(config.failed_folder())
     # print(config.success_folder())
@@ -130,4 +131,3 @@ if __name__ == "__main__":
     # print(config.escape_literals())
     # print(config.escape_folder())
     # print(config.debug())
-    print(config.custom_path())

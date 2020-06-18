@@ -1,25 +1,21 @@
 import argparse
 from core import *
+import os
 from number_parser import get_number
 
 
 def check_update(local_version):
     data = json.loads(get_html("https://api.github.com/repos/yoshiko2/AV_Data_Capture/releases/latest"))
 
-    try:
-        remote = float(data["tag_name"])
-        local = float(local_version)
-    except:
-        print("[-] Check update failed! Skipped.")
-        return
+    remote = data["tag_name"]
 
-    download_url = data["html_url"]
+    local = local_version
 
-    if local < remote:
+    if not local == remote:
         line1 = "* New update " + str(remote) + " *"
         print("[*]" + line1.center(54))
         print("[*]" + "↓ Download ↓".center(54))
-        print("[*] " + download_url)
+        print("[*] https://github.com/yoshiko2/AV_Data_Capture/releases")
         print("[*]======================================================")
 
 
@@ -32,12 +28,10 @@ def argparse_function() -> [str, str, bool]:
 
     return args.file, args.config, args.autoexit
 
-
 def movie_lists(root, escape_folder):
     # 自定义路径
     if conf.custom_path() != 'False':
         os.chdir(conf.custom_path())
-
     for folder in escape_folder:
         if folder in root:
             return []
@@ -46,12 +40,10 @@ def movie_lists(root, escape_folder):
     dirs = os.listdir(root)
     for entry in dirs:
         f = os.path.join(root, entry)
-        print(f)
         if os.path.isdir(f):
             total += movie_lists(f, escape_folder)
         elif os.path.splitext(f)[1] in file_type:
             total.append(f)
-
     return total
 
 
@@ -71,12 +63,11 @@ def CEF(path):
             os.removedirs(path + '/' + file)  # 删除这个空文件夹
             print('[+]Deleting empty folder', path + '/' + file)
     except:
-        pass
+        a = ''
 
 
 def create_data_and_move(file_path: str, c: config.Config):
     # Normalized number, eg: 111xxx-222.mp4 -> xxx-222.mp4
-    print(file_path)
     n_number = get_number(file_path)
 
     try:
@@ -99,7 +90,7 @@ def create_data_and_move(file_path: str, c: config.Config):
 
 
 if __name__ == '__main__':
-    version = '3.4'
+    version = '3.4.3'
 
     # Parse command line args
     single_file_path, config_file, auto_exit = argparse_function()
@@ -144,5 +135,5 @@ if __name__ == '__main__':
     CEF(conf.failed_folder())
     print("[+]All finished!!!")
     if auto_exit:
-        exit(0)
+        os._exit(0)
     input("[+][+]Press enter key exit, you can check the error message before you exit.")

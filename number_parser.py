@@ -3,7 +3,6 @@ import re
 
 
 def get_number(filepath: str) -> str:
-
     """
     >>> from number_parser import get_number
     >>> get_number("/Users/Guest/AV_Data_Capture/snis-829.mp4")
@@ -34,14 +33,8 @@ def get_number(filepath: str) -> str:
         filepath.strip('22-sht.me').strip('-HD').strip('-hd')
         filename = str(re.sub("\[\d{4}-\d{1,2}-\d{1,2}\] - ", "", filepath))  # 去除文件名中时间
         if 'FC2' or 'fc2' in filename:
-            filename = filename.replace('-PPV', '').replace('PPV-', '').replace('FC2PPV-', 'FC2-').replace('FC2PPV_', 'FC2-')
-            filename = filename.replace('-ppv', '').replace('ppv-', '').replace('fc2ppv-', 'FC2-').replace('fc2ppv_', 'FC2-')
-
-        try:
-            file_number = re.search(r'\w+-\w+', filename, re.A).group()
-        except OSError:
-            pass
-
+            filename = filename.replace('PPV','').replace('ppv','').replace('--','-').replace('_','-')
+        file_number = re.search(r'\w+-\w+', filename, re.A).group()
         return file_number
     else:  # 提取不含减号-的番号，FANZA CID
         try:
